@@ -25,6 +25,15 @@ fetch(API_URL)
 .then(res => res.json())
 .then(data => {
 
+  if(params.lat && params.lng){
+
+  const moveLatLon = new kakao.maps.LatLng(params.lat, params.lng)
+
+  map.setCenter(moveLatLon)
+  map.setLevel(3) // 확대
+
+}
+
   data.forEach(place => {
 
     let imageSrc
@@ -36,7 +45,7 @@ fetch(API_URL)
     } else if (place.category === "카페") {
       imageSrc = "images/marker-green.png"
     } else {
-      imageSrc = "images/marker-blue.png"
+      imageSrc = "images/marker-yellow.png"
     }
 
     const imageSize = new kakao.maps.Size(32, 35)
@@ -49,6 +58,19 @@ fetch(API_URL)
       image: markerImage
     })
 
+    // ⭐ 선택된 마커 강조
+if(place.name == params.name){
+
+  map.setCenter(new kakao.maps.LatLng(place.lat, place.lng))
+  map.setLevel(3)
+
+  const infowindow = new kakao.maps.InfoWindow({
+    content: `<div style="padding:10px"><b>${place.name}</b></div>`
+  })
+
+  infowindow.open(map, marker)
+}
+
     // 네이버 지도 검색 링크
     const naverUrl =
       "https://map.naver.com/v5/search/" +
@@ -59,18 +81,25 @@ fetch(API_URL)
           카카오 지도
     </button>*/
     const infowindow = new kakao.maps.InfoWindow({
-      content: `
-      <div style="padding:10px;font-size:13px">
-        <b>${place.name}</b><br>
-        ${place.category}<br><br>
+  content: `
+  <div style="padding:10px;font-size:13px">
+    <b>${place.name}</b><br>
+    ${place.category}<br><br>
+
+    <button onclick="openNaver('${naverUrl}')">
+      네이버 지도
+    </button>
+
+    <br><br>
+
+    <button onclick="goList('${place.name}','${place.category}')">
+      리스트 보기
+    </button>
 
 
-        <button onclick="openNaver('${naverUrl}')">
-          네이버 지도
-        </button>
-      </div>
-      `
-    })
+  </div>
+  `
+})
 
     kakao.maps.event.addListener(marker, "click", function () {
 
@@ -93,6 +122,7 @@ fetch(API_URL)
         infowindow.close()
       }, 3000)
 
+
     })
 
     markers.push(marker)
@@ -100,6 +130,8 @@ fetch(API_URL)
 
   clusterer.addMarkers(markers)
 })
+
+
 
 // 카카오 지도 열기
 function openKakao(lat, lng) {
@@ -125,3 +157,20 @@ navigator.geolocation.getCurrentPosition(function (pos) {
   map.setCenter(new kakao.maps.LatLng(lat, lng))
 
 })
+
+function getParams(){
+  const url = new URL(window.location.href)
+  return {
+    name: url.searchParams.get("name"),
+    lat: parseFloat(url.searchParams.get("lat")),
+    lng: parseFloat(url.searchParams.get("lng"))
+  }
+}
+
+const params = getParams()
+
+function goList(name, category){
+  window.location.href =
+  `index.html?name=${name}&category=${encodeURIComponent(category)}`
+}
+

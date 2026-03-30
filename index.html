@@ -14,29 +14,37 @@
 
 <body>
 
-<h1>🌴 제주 여행</h1>
+<div class="app">
 
-<nav>
-<!--<a href="index.html">리스트</a>-->
-<a href="map.html">지도</a>
-<!--<a href="schedule.html">일정</a>-->
-</nav>
+  <!-- ⭐ 고정 영역 -->
+  <div class="header">
 
-<div class="filters">
+    <h1>🌴 제주 여행</h1>
 
-<button onclick="filterPlaces('전체')">전체</button>
-<button onclick="filterPlaces('맛집')">맛집</button>
-<button onclick="filterPlaces('카페')">카페</button>
-<button onclick="filterPlaces('관광지')">관광지</button>
+    <nav>
+      <a href="index.html">리스트</a>
+      <a href="map.html">지도</a>
+    </nav>
+
+    <div class="filters">
+
+      <button onclick="filterPlaces('전체', this)" class="active">전체</button>
+      <button onclick="filterPlaces('맛집', this)">맛집</button>
+      <button onclick="filterPlaces('카페', this)">카페</button>
+      <button onclick="filterPlaces('관광지', this)">관광지</button>
+
+    </div>
+
+    <button onclick="getLocation()">📍 현재 위치</button>
+
+  </div>
+
+  <!-- ⭐ 스크롤 영역 -->
+  <div id="list" class="list"></div>
 
 </div>
 
-<button onclick="getLocation()">📍 현재 위치</button>
-
-<div id="list"></div>
-
-<script src="data.js"></script>
-<script src="app.js"></script>
+<script src="list.js"></script>
 
 </body>
 </html>
