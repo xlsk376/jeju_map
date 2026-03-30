@@ -1,0 +1,8 @@
+{
+    "name":"제주 여행",
+    "short_name":"JejuTrip",
+    "start_url":"index.html",
+    "display":"standalone",
+    "background_color":"#ffffff",
+    "theme_color":"#2c7be5"
+    }
